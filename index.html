@@ -12,7 +12,6 @@
 </head>
 <body>
   <a href="#main" class="skip-link">跳至主要內容</a>
-
   <header class="site-header" id="header">
     <div class="container header-inner">
       <a href="/" class="logo" aria-label="巴拉國政府首頁">
@@ -24,89 +23,75 @@
       </a>
       <nav class="nav" aria-label="主要導覽">
         <ul class="nav-list">
-          <li><a href="#services" class="nav-link">服務</a></li>
+          <li><a href="#president" class="nav-link">總統</a></li>
+          <li><a href="#police" class="nav-link">警察局</a></li>
           <li><a href="#departments" class="nav-link">部會</a></li>
           <li><a href="#news" class="nav-link">新聞</a></li>
           <li><a href="#about" class="nav-link">關於</a></li>
-          <li><a href="#contact" class="nav-link">聯絡</a></li>
         </ul>
       </nav>
       <div class="header-actions">
         <button class="btn btn-ghost" type="button" id="lang-toggle" aria-label="切換語言">EN</button>
-        <a href="#services" class="btn btn-primary">立即辦理</a>
         <button class="menu-toggle" type="button" aria-label="開啟選單" aria-expanded="false" id="menu-toggle">
           <span></span><span></span>
         </button>
       </div>
     </div>
   </header>
-
   <div class="mobile-nav" id="mobile-nav" hidden>
     <nav aria-label="行動導覽">
       <ul>
-        <li><a href="#services">服務</a></li>
+        <li><a href="#president">總統</a></li>
+        <li><a href="#police">警察局</a></li>
         <li><a href="#departments">部會</a></li>
         <li><a href="#news">新聞</a></li>
         <li><a href="#about">關於</a></li>
-        <li><a href="#contact">聯絡</a></li>
       </ul>
     </nav>
   </div>
-
   <main id="main">
     <section class="hero">
       <div class="container hero-inner">
         <p class="hero-eyebrow">巴拉國 · 人民至上</p>
         <h1 class="hero-title">透明治理<br><span class="hero-title-accent">服務每一位公民</span></h1>
-        <p class="hero-desc">巴拉國政府官方入口。提供一站式數位服務、最新政策與公開資訊，讓治理更親近、更有效率。</p>
-        <div class="hero-actions">
-          <a href="#services" class="btn btn-primary btn-lg">探索服務</a>
-          <a href="#news" class="btn btn-ghost btn-lg">最新消息</a>
-        </div>
+        <p class="hero-desc">巴拉國政府官方入口。提供公開資訊與政策說明，讓治理更親近、更透明。</p>
       </div>
     </section>
-
-    <section class="section services" id="services">
+    <section class="section president" id="president">
       <div class="container">
-        <header class="section-header">
-          <h2 class="section-title">常用服務</h2>
-          <p class="section-desc">最常被使用的政府數位服務，一鍵直達</p>
-        </header>
-        <div class="services-grid">
-          <a href="#" class="service-card" data-stagger>
-            <div class="service-icon" aria-hidden="true">📋</div>
-            <h3>戶政服務</h3>
-            <p>戶籍、身分證、護照申請與查詢</p>
-          </a>
-          <a href="#" class="service-card" data-stagger>
-            <div class="service-icon" aria-hidden="true">💳</div>
-            <h3>稅務申報</h3>
-            <p>線上報稅、繳費與退稅進度查詢</p>
-          </a>
-          <a href="#" class="service-card" data-stagger>
-            <div class="service-icon" aria-hidden="true">❤️</div>
-            <h3>健保與社福</h3>
-            <p>健保卡、補助申請與社會福利查詢</p>
-          </a>
-          <a href="#" class="service-card" data-stagger>
-            <div class="service-icon" aria-hidden="true">📚</div>
-            <h3>教育資源</h3>
-            <p>學校申請、獎學金與終身學習平台</p>
-          </a>
-          <a href="#" class="service-card" data-stagger>
-            <div class="service-icon" aria-hidden="true">🏠</div>
-            <h3>住宅與土地</h3>
-            <p>地政、建照、社會住宅申請</p>
-          </a>
-          <a href="#" class="service-card" data-stagger>
-            <div class="service-icon" aria-hidden="true">🚌</div>
-            <h3>交通與運輸</h3>
-            <p>駕照、車輛、大眾運輸即時資訊</p>
-          </a>
+        <header class="section-header"><h2 class="section-title">總統</h2></header>
+        <div class="president-card" data-stagger>
+          <p class="president-label">巴拉國總統</p>
+          <h3 class="president-name">巴拉拉神奇魔法仙女-朱亮穎</h3>
+          <p class="president-desc">領導巴拉國邁向透明、公正與永續的未來。</p>
         </div>
       </div>
     </section>
-
+    <section class="section police" id="police">
+      <div class="container">
+        <header class="section-header"><h2 class="section-title">警察局公告</h2></header>
+        <div class="police-banner" data-stagger>
+          <div class="police-banner-text">
+            <h3>加入巴拉國警察局</h3>
+            <p>歡迎有志服務人民、維護治安的公民加入我們。詳情請前往警察局官網。</p>
+            <a href="https://blapolice.illusd.com/" class="btn btn-primary" target="_blank" rel="noopener noreferrer">前往警察局官網</a>
+          </div>
+        </div>
+        <h3 class="police-sub">已加入的警察</h3>
+        <div class="police-grid">
+          <article class="officer-card" data-stagger>
+            <div class="officer-photo"><img src="PLACEHOLDER_CHEN" alt="陳庭萱" width="200" height="200"></div>
+            <h4>陳庭萱</h4>
+            <p class="officer-role">巴拉國警察</p>
+          </article>
+          <article class="officer-card" data-stagger>
+            <div class="officer-photo"><img src="PLACEHOLDER_LI" alt="李東羿" width="200" height="141"></div>
+            <h4>李東羿</h4>
+            <p class="officer-role">巴拉國警察</p>
+          </article>
+        </div>
+      </div>
+    </section>
     <section class="section departments" id="departments">
       <div class="container">
         <header class="section-header">
@@ -123,69 +108,48 @@
         </div>
       </div>
     </section>
-
     <section class="section news" id="news">
       <div class="container">
-        <header class="section-header">
-          <h2 class="section-title">最新消息</h2>
-          <a href="#" class="section-link">查看全部 →</a>
-        </header>
+        <header class="section-header"><h2 class="section-title">最新消息</h2></header>
         <div class="news-list">
           <article class="news-item" data-stagger>
             <time datetime="2026-09-20">2026.09.20</time>
-            <h3><a href="#">巴拉國推出新一代數位身分證，全面提升資安與便利性</a></h3>
-            <p>內政部宣布自 10 月起開放申請，支援行動載具與跨部會服務串接。</p>
+            <h3>巴拉國警察局開放加入申請</h3>
+            <p>有志服務治安的公民可前往 <a href="https://blapolice.illusd.com/" target="_blank" rel="noopener noreferrer">blapolice.illusd.com</a> 了解詳情。</p>
           </article>
           <article class="news-item" data-stagger>
             <time datetime="2026-09-18">2026.09.18</time>
-            <h3><a href="#">2026 年度全民健保費率調整說明會開放報名</a></h3>
-            <p>衛生福利部將於各縣市辦理說明會，歡迎民眾線上預約參加。</p>
+            <h3>總統巴拉拉神奇魔法仙女-朱亮穎發表施政方針</h3>
+            <p>強調透明治理與人民福祉為施政核心。</p>
           </article>
           <article class="news-item" data-stagger>
             <time datetime="2026-09-15">2026.09.15</time>
-            <h3><a href="#">巴拉國永續發展目標進度報告正式發布</a></h3>
+            <h3>巴拉國永續發展目標進度報告正式發布</h3>
             <p>行政院公布最新 SDGs 執行成果，氣候行動與教育品質指標大幅進步。</p>
           </article>
         </div>
       </div>
     </section>
-
     <section class="section about" id="about">
       <div class="container about-inner">
         <div class="about-content">
           <h2 class="section-title">關於巴拉國政府</h2>
-          <p>巴拉國是一個以人民福祉為核心的現代國家。政府致力於透明治理、數位轉型與永續發展，透過開放資料與一站式服務，讓每一位公民都能輕鬆取得所需資源。</p>
-          <p>我們相信優秀的公共服務應該像空氣一樣自然——隱形卻不可或缺。</p>
-          <a href="#contact" class="btn btn-primary">聯絡我們</a>
+          <p>巴拉國是一個以人民福祉為核心的現代國家。政府致力於透明治理、數位轉型與永續發展，透過公開資訊，讓每一位公民都能了解施政方向。</p>
+          <p>現任總統為<strong>巴拉拉神奇魔法仙女-朱亮穎</strong>。</p>
         </div>
         <div class="about-stats">
           <div class="stat" data-stagger><span class="stat-value">12</span><span class="stat-label">行政部會</span></div>
-          <div class="stat" data-stagger><span class="stat-value">240+</span><span class="stat-label">線上服務</span></div>
-          <div class="stat" data-stagger><span class="stat-value">98%</span><span class="stat-label">數位覆蓋率</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section contact" id="contact">
-      <div class="container contact-inner">
-        <h2 class="section-title">需要協助？</h2>
-        <p class="section-desc">24 小時客服專線與線上諮詢隨時為您服務</p>
-        <div class="contact-actions">
-          <a href="tel:1999" class="btn btn-primary btn-lg">撥打 1999</a>
-          <a href="mailto:service@balalagov.gov" class="btn btn-ghost btn-lg">寄送郵件</a>
+          <div class="stat" data-stagger><span class="stat-value">2</span><span class="stat-label">現任警察</span></div>
+          <div class="stat" data-stagger><span class="stat-value">1</span><span class="stat-label">現任總統</span></div>
         </div>
       </div>
     </section>
   </main>
-
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="logo-mark small" aria-hidden="true"></span>
-        <div>
-          <strong>巴拉國政府</strong>
-          <span>BalalaGovernment</span>
-        </div>
+        <div><strong>巴拉國政府</strong><span>BalalaGovernment</span></div>
       </div>
       <div class="footer-links">
         <a href="#">隱私權政策</a>
@@ -196,7 +160,6 @@
       <p class="footer-copy">© 2026 巴拉國政府. 保留所有權利.</p>
     </div>
   </footer>
-
   <script src="script.js"></script>
 </body>
 </html>
