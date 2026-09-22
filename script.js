@@ -1,14 +1,10 @@
 /**
  * BalalaGovernment — subtle interactions
- * - Mobile nav toggle
- * - IntersectionObserver stagger (30–60ms cascade)
- * - Respect prefers-reduced-motion
  */
 
 (() => {
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // ——— Mobile menu ———
   const toggle = document.getElementById("menu-toggle");
   const mobileNav = document.getElementById("mobile-nav");
 
@@ -21,7 +17,6 @@
       document.body.style.overflow = open ? "" : "hidden";
     });
 
-    // Close on link click
     mobileNav.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => {
         toggle.setAttribute("aria-expanded", "false");
@@ -32,7 +27,6 @@
     });
   }
 
-  // ——— Stagger reveal ———
   if (reduced) {
     document.querySelectorAll("[data-stagger]").forEach((el) => {
       el.classList.add("is-visible");
@@ -50,7 +44,7 @@
         const el = entry.target;
         const siblings = [...el.parentElement.querySelectorAll("[data-stagger]")];
         const index = siblings.indexOf(el);
-        const delay = Math.min(index * 45, 180); // 45ms stagger, cap 180ms
+        const delay = Math.min(index * 45, 180);
 
         el.style.transitionDelay = `${delay}ms`;
         el.classList.add("is-visible");
