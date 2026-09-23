@@ -1,4 +1,4 @@
--- 在 Supabase SQL Editor 執行此腳本
+-- 巴拉國身分證資料表（可重複執行）
 
 create table if not exists public.id_cards (
   id uuid primary key default gen_random_uuid(),
@@ -9,13 +9,18 @@ create table if not exists public.id_cards (
 
 alter table public.id_cards enable row level security;
 
--- 允許匿名讀寫（此為演示用途；正式環境請改更嚴格政策）
+-- 先刪除舊政策（避免 42710 已存在錯誤）
+drop policy if exists "allow anon select" on public.id_cards;
+drop policy if exists "allow anon insert" on public.id_cards;
+
 create policy "allow anon select"
   on public.id_cards for select
-  to anon using (true);
+  to anon
+  using (true);
 
 create policy "allow anon insert"
   on public.id_cards for insert
-  to anon with check (true);
+  to anon
+  with check (true);
 
 grant select, insert on public.id_cards to anon;
