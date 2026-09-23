@@ -14,6 +14,7 @@
     '李藹棠',
     '温世鵬',
     '陳宣羽',
+    '張語芯',
   ]);
 
   const LOCAL_KEY = 'balala_id_cards_v1';
@@ -188,7 +189,7 @@
     }
 
     if (!ALLOWED.includes(name)) {
-      showError('此姓名未在巴拉國國民登記名冊中，無法核發身分證。');
+      showError('無法核發身分證，請確認姓名是否正確。');
       nameInput.focus();
       return;
     }
