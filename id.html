@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>身分證登入 | 巴拉國政府</title>
+  <meta name="description" content="巴拉國國民身分證申請與查詢">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="id.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">跳至主要內容</a>
+
+  <header class="site-header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="巴拉國政府首頁">
+        <span class="logo-mark" aria-hidden="true"></span>
+        <span class="logo-text">
+          <span class="logo-zh">巴拉國政府</span>
+          <span class="logo-en">BalalaGovernment</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="主要導覽">
+        <ul class="nav-list">
+          <li><a href="index.html#president" class="nav-link">總統</a></li>
+          <li><a href="index.html#police" class="nav-link">警察局</a></li>
+          <li><a href="id.html" class="nav-link" aria-current="page">身分證</a></li>
+          <li><a href="index.html#departments" class="nav-link">部會</a></li>
+          <li><a href="index.html#about" class="nav-link">關於</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a href="index.html" class="btn btn-ghost">回首頁</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="id-main">
+    <div class="container id-layout">
+      <section class="id-panel" id="panel-form">
+        <header class="id-panel-header">
+          <h1 class="id-title">國民身分證</h1>
+          <p class="id-desc">請輸入全名以查詢或核發巴拉國身分證。僅限已登記之國民。</p>
+        </header>
+
+        <form id="id-form" class="id-form" novalidate>
+          <label class="id-label" for="full-name">全名</label>
+          <input
+            type="text"
+            id="full-name"
+            name="fullName"
+            class="id-input"
+            placeholder="請輸入全名"
+            autocomplete="name"
+            required
+            maxlength="20"
+          >
+          <p class="id-hint" id="form-hint">可接受姓名：朱亮穎、李東羿、涂品彥、陳庭萱、李藹棠、温世鵬、陳宣羽</p>
+          <p class="id-error" id="form-error" hidden></p>
+          <button type="submit" class="btn btn-primary id-submit" id="submit-btn">
+            查詢／核發身分證
+          </button>
+        </form>
+      </section>
+
+      <section class="id-panel" id="panel-result" hidden>
+        <header class="id-panel-header">
+          <h2 class="id-title">身分證已核發</h2>
+          <p class="id-desc" id="result-msg">以下為您的巴拉國國民身分證資料。</p>
+        </header>
+
+        <article class="id-card" id="id-card" aria-label="巴拉國國民身分證">
+          <div class="id-card-header">
+            <span class="id-card-gov">巴拉國政府</span>
+            <span class="id-card-type">國民身分證</span>
+          </div>
+          <div class="id-card-body">
+            <div class="id-card-fields">
+              <div class="id-field">
+                <span class="id-field-label">姓名</span>
+                <span class="id-field-value" id="card-name">—</span>
+              </div>
+              <div class="id-field">
+                <span class="id-field-label">身分證字號</span>
+                <span class="id-field-value mono" id="card-number">—</span>
+              </div>
+              <div class="id-field">
+                <span class="id-field-label">國籍</span>
+                <span class="id-field-value">巴拉國</span>
+              </div>
+              <div class="id-field">
+                <span class="id-field-label">核發狀態</span>
+                <span class="id-field-value" id="card-status">有效</span>
+              </div>
+            </div>
+            <div class="id-card-seal" aria-hidden="true">
+              <span class="seal-ring"></span>
+              <span class="seal-text">巴拉</span>
+            </div>
+          </div>
+          <div class="id-card-footer">
+            <span>BalalaGovernment</span>
+            <span id="card-date">—</span>
+          </div>
+        </article>
+
+        <div class="id-actions">
+          <button type="button" class="btn btn-ghost" id="btn-reset">重新查詢</button>
+          <a href="index.html" class="btn btn-primary">回首頁</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-mark small" aria-hidden="true"></span>
+        <div>
+          <strong>巴拉國政府</strong>
+          <span>BalalaGovernment</span>
+        </div>
+      </div>
+      <p class="footer-copy">© 2026 巴拉國政府. 保留所有權利.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="id.js"></script>
+</body>
+</html>
