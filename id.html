@@ -43,7 +43,7 @@
       <section class="id-panel" id="panel-form">
         <header class="id-panel-header">
           <h1 class="id-title">國民身分證</h1>
-          <p class="id-desc">請輸入全名以查詢或核發巴拉國身分證。僅限已登記之國民。</p>
+          <p class="id-desc">請輸入全名與密碼以查詢或核發巴拉國身分證。僅限已登記之國民。</p>
         </header>
 
         <form id="id-form" class="id-form" novalidate>
@@ -58,9 +58,23 @@
             required
             maxlength="20"
           >
+
+          <div id="password-field" hidden>
+            <label class="id-label" for="id-password">密碼</label>
+            <input
+              type="password"
+              id="id-password"
+              name="password"
+              class="id-input"
+              placeholder="請輸入密碼"
+              autocomplete="current-password"
+              maxlength="32"
+            >
+          </div>
+
           <p class="id-error" id="form-error" hidden></p>
           <button type="submit" class="btn btn-primary id-submit" id="submit-btn">
-            查詢／核發身分證
+            下一步
           </button>
         </form>
       </section>
@@ -129,6 +143,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
+  <script src="id-registry.js"></script>
   <script src="id.js"></script>
 </body>
 </html>
