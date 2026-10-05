@@ -9,9 +9,9 @@ create table if not exists public.id_cards (
 
 alter table public.id_cards enable row level security;
 
--- 先刪除舊政策（避免 42710 已存在錯誤）
 drop policy if exists "allow anon select" on public.id_cards;
 drop policy if exists "allow anon insert" on public.id_cards;
+drop policy if exists "allow anon update" on public.id_cards;
 
 create policy "allow anon select"
   on public.id_cards for select
@@ -23,4 +23,10 @@ create policy "allow anon insert"
   to anon
   with check (true);
 
-grant select, insert on public.id_cards to anon;
+create policy "allow anon update"
+  on public.id_cards for update
+  to anon
+  using (true)
+  with check (true);
+
+grant select, insert, update on public.id_cards to anon;
