@@ -1,6 +1,12 @@
 {
   "rewrites": [
-    { "source": "/id-check/id-pass=:id", "destination": "/api/id-check?id=:id" },
-    { "source": "/id-check/id-pass=:id/", "destination": "/api/id-check?id=:id" }
+    {
+      "source": "/id-check/id-pass=:id/password=:password",
+      "destination": "/api/id-check?id=:id&password=:password"
+    },
+    {
+      "source": "/id-check/id-pass=:id/password=:password/",
+      "destination": "/api/id-check?id=:id&password=:password"
+    }
   ]
 }

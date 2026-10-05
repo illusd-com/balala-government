@@ -1,7 +1,7 @@
 /**
- * GET /api/id-check?id=Bxxxxxxxxx
- * or rewritten from /id-check/id-pass={id}/
- * Returns pure text:
+ * GET /id-check/id-pass={id}/password={password}
+ * or /api/id-check?id=...&password=...
+ * Pure text:
  *   /id=true/name={name}
  * or
  *   /id=false/name=unknow
@@ -11,8 +11,19 @@
 const SALT = 'balala-reset-2026-10';
 
 const CITIZENS = [
-  '李東羿', '相俊寬', '丁上航', '陳予睿', '陳初樂', '溫世鵬', '吳宥廷',
-  '涂品彥', '張語芯', '李藹棠', '朱亮穎', '陳宣羽', '陳庭萱',
+  { name: '李東羿', password: '00005055' },
+  { name: '相俊寬', password: '0910365850' },
+  { name: '丁上航', password: '9220' },
+  { name: '陳予睿', password: '9220' },
+  { name: '陳初樂', password: '9220' },
+  { name: '溫世鵬', password: '9220' },
+  { name: '吳宥廷', password: '9220' },
+  { name: '涂品彥', password: '9220' },
+  { name: '張語芯', password: '1022' },
+  { name: '李藹棠', password: '9220' },
+  { name: '朱亮穎', password: '9220' },
+  { name: '陳宣羽', password: '9220' },
+  { name: '陳庭萱', password: '9220' },
 ];
 
 function hashName(name) {
@@ -31,35 +42,60 @@ function idFor(name) {
 }
 
 const BY_ID = Object.create(null);
-for (const name of CITIZENS) {
-  BY_ID[idFor(name)] = name;
+for (const c of CITIZENS) {
+  BY_ID[idFor(c.name)] = c;
+}
+
+function fail(res) {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store');
+  res.end('/id=false/name=unknow\n*try-again*');
+}
+
+function ok(res, name) {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store');
+  res.end('/id=true/name=' + name);
 }
 
 module.exports = function handler(req, res) {
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Cache-Control', 'no-store');
-
   if (req.method !== 'GET' && req.method !== 'HEAD') {
-    res.statusCode = 405;
-    res.end('/id=false/name=unknow\n*try-again*');
+    fail(res);
     return;
   }
 
-  let id = (req.query && (req.query.id || req.query['id-pass'])) || '';
-  if (Array.isArray(id)) id = id[0];
+  let id = '';
+  let password = '';
+
+  if (req.query) {
+    const qId = req.query.id || req.query['id-pass'];
+    const qPw = req.query.password || req.query.pass || req.query.pw;
+    if (qId) id = Array.isArray(qId) ? qId[0] : qId;
+    if (qPw) password = Array.isArray(qPw) ? qPw[0] : qPw;
+  }
+
+  if (req.url) {
+    const mId = req.url.match(/id-pass=([A-Za-z0-9]+)/i);
+    const mPw = req.url.match(/password=([^/&#?]+)/i);
+    if (!id && mId) id = mId[1];
+    if (!password && mPw) password = decodeURIComponent(mPw[1]);
+  }
+
   id = String(id || '').trim().toUpperCase();
+  password = String(password || '').trim();
 
-  if (!id && req.url) {
-    const m = req.url.match(/id-pass=([A-Za-z0-9]+)/i);
-    if (m) id = m[1].toUpperCase();
+  if (!id || !password) {
+    fail(res);
+    return;
   }
 
-  const name = BY_ID[id];
-  if (name) {
-    res.statusCode = 200;
-    res.end('/id=true/name=' + name);
-  } else {
-    res.statusCode = 200;
-    res.end('/id=false/name=unknow\n*try-again*');
+  const citizen = BY_ID[id];
+  if (!citizen || citizen.password !== password) {
+    fail(res);
+    return;
   }
+
+  ok(res, citizen.name);
 };
