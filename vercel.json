@@ -7,6 +7,10 @@
     {
       "source": "/id-check/id-pass=:id/password=:password/",
       "destination": "/api/id-check?id=:id&password=:password"
+    },
+    {
+      "source": "/id-check/(.*)",
+      "destination": "/api/id-check"
     }
   ]
 }
