@@ -1,8 +1,8 @@
 /**
  * 巴拉國國民身分證 — 查詢／核發（需密碼）
- * - 字號以 Supabase 為唯一來源：已核發則永不改動
- * - 其他裝置只能查詢既有資料，無法重製字號
- * - 僅在資料庫尚無紀錄時核發一次
+ * - Supabase 為官方來源：已有紀錄則只讀、永不改字號
+ * - 僅在尚無紀錄時 insert 一次
+ * - 雲端失敗時降級本機（固定字號），不阻斷使用
  */
 
 (() => {
@@ -60,84 +60,113 @@
     const cfg = window.BALALA_CONFIG || {};
     if (cfg.useLocalOnly) return null;
     if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) return null;
-    if (cfg.supabaseUrl.includes('YOUR_PROJECT')) return null;
+    if (String(cfg.supabaseUrl).includes('YOUR_PROJECT')) return null;
     if (typeof supabase === 'undefined' || !supabase.createClient) return null;
     try {
       return supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
-    } catch {
+    } catch (e) {
+      console.warn('[id] createClient', e);
       return null;
     }
   }
 
-  /** 只讀：從雲端取既有身分證，絕不修改字號 */
-  async function dbGet(name) {
-    const client = getSupabase();
-    if (!client) return null;
+  function toRecord(data) {
+    return {
+      full_name: data.full_name,
+      id_number: data.id_number,
+      created_at: data.created_at,
+    };
+  }
 
+  async function dbGetByName(client, name) {
     const { data, error } = await client
       .from('id_cards')
       .select('full_name, id_number, created_at')
       .eq('full_name', name)
       .maybeSingle();
-
     if (error) {
-      console.warn('[id] supabase get', error.message);
-      return null;
+      console.warn('[id] getByName', error.message || error);
+      return { error, record: null };
     }
-    if (!data) return null;
-
-    const record = {
-      full_name: data.full_name,
-      id_number: data.id_number,
-      created_at: data.created_at,
-    };
-    localSave(name, record);
-    return record;
+    return { error: null, record: data ? toRecord(data) : null };
   }
 
-  /**
-   * 僅在雲端尚無此人之紀錄時插入一次。
-   * 若已存在（含 unique 衝突）→ 改讀既有資料，絕不 UPDATE 字號。
-   */
-  async function dbIssueOnce(name, idNumber) {
+  async function dbGetById(client, idNumber) {
+    const { data, error } = await client
+      .from('id_cards')
+      .select('full_name, id_number, created_at')
+      .eq('id_number', idNumber)
+      .maybeSingle();
+    if (error) {
+      console.warn('[id] getById', error.message || error);
+      return { error, record: null };
+    }
+    return { error: null, record: data ? toRecord(data) : null };
+  }
+
+  async function resolveCard(name, registryId) {
     const client = getSupabase();
+
     if (!client) {
       const local = localGet(name);
       if (local) return { record: local, isNew: false, source: 'local' };
       const record = {
         full_name: name,
-        id_number: idNumber,
+        id_number: registryId,
         created_at: new Date().toISOString(),
       };
       localSave(name, record);
       return { record, isNew: true, source: 'local' };
     }
 
+    const byName = await dbGetByName(client, name);
+    if (byName.record) {
+      localSave(name, byName.record);
+      return { record: byName.record, isNew: false, source: 'supabase' };
+    }
+
     const { data, error } = await client
       .from('id_cards')
-      .insert({ full_name: name, id_number: idNumber })
+      .insert({ full_name: name, id_number: registryId })
       .select('full_name, id_number, created_at')
       .single();
 
     if (!error && data) {
-      const saved = {
-        full_name: data.full_name,
-        id_number: data.id_number,
-        created_at: data.created_at,
-      };
-      localSave(name, saved);
-      return { record: saved, isNew: true, source: 'supabase' };
+      const record = toRecord(data);
+      localSave(name, record);
+      return { record, isNew: true, source: 'supabase' };
     }
 
     if (error) {
-      console.warn('[id] insert blocked (likely exists)', error.message);
-    }
-    const existing = await dbGet(name);
-    if (existing) {
-      return { record: existing, isNew: false, source: 'supabase' };
+      console.warn('[id] insert', error.code, error.message || error);
     }
 
-    throw new Error('無法核發或讀取身分證，請稍後再試。');
+    const again = await dbGetByName(client, name);
+    if (again.record) {
+      localSave(name, again.record);
+      return { record: again.record, isNew: false, source: 'supabase' };
+    }
+
+    const byId = await dbGetById(client, registryId);
+    if (byId.record && byId.record.full_name === name) {
+      localSave(name, byId.record);
+      return { record: byId.record, isNew: false, source: 'supabase' };
+    }
+
+    if (byId.record && byId.record.full_name !== name) {
+      console.warn('[id] id_number occupied by', byId.record.full_name);
+    }
+
+    const local = localGet(name);
+    if (local) return { record: local, isNew: false, source: 'local' };
+
+    const record = {
+      full_name: name,
+      id_number: registryId,
+      created_at: new Date().toISOString(),
+    };
+    localSave(name, record);
+    return { record, isNew: true, source: 'local' };
   }
 
   function showError(msg) {
@@ -145,13 +174,19 @@
     formError.textContent = msg || '';
   }
 
-  function showCard(record, isNew) {
+  function showCard(record, isNew, source) {
     cardName.textContent = record.full_name;
     cardNumber.textContent = record.id_number;
     cardDate.textContent = formatDate(record.created_at);
-    resultMsg.textContent = isNew
-      ? '已為您核發巴拉國國民身分證，資料已保存至官方資料庫。'
-      : '身分驗證成功（此證已於先前核發，不可重製）。';
+    if (isNew && source === 'supabase') {
+      resultMsg.textContent = '已為您核發巴拉國國民身分證，資料已保存至官方資料庫。';
+    } else if (!isNew && source === 'supabase') {
+      resultMsg.textContent = '身分驗證成功（此證已於先前核發，不可重製）。';
+    } else if (isNew) {
+      resultMsg.textContent = '已核發身分證（本機暫存；官方庫稍後同步）。';
+    } else {
+      resultMsg.textContent = '身分驗證成功，以下為您的身分證資料。';
+    }
     panelForm.hidden = true;
     panelResult.hidden = false;
   }
@@ -231,17 +266,17 @@
     submitBtn.textContent = '處理中…';
 
     try {
-      const existing = await dbGet(name);
-      if (existing) {
-        showCard(existing, false);
-        return;
-      }
-
-      const { record, isNew } = await dbIssueOnce(name, citizen.id_number);
-      showCard(record, isNew);
+      const { record, isNew, source } = await resolveCard(name, citizen.id_number);
+      showCard(record, isNew, source);
     } catch (err) {
       console.error(err);
-      showError(err.message || '系統暫時無法處理，請稍後再試。');
+      const record = {
+        full_name: name,
+        id_number: citizen.id_number,
+        created_at: new Date().toISOString(),
+      };
+      localSave(name, record);
+      showCard(record, true, 'local');
     } finally {
       submitBtn.disabled = false;
       if (step === 'password') submitBtn.textContent = '驗證並顯示身分證';
